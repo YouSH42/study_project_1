@@ -4,13 +4,26 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
+	"text/template"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/mux"
 )
 
-func main() {
+func testmethod(w http.ResponseWriter, r *http.Request) {
+
+	tmpl := template.Must(template.ParseFiles("templates/index.html"))
+	tmpl.Execute(w, nil)
+
+}
+
+func GetQueryMenuCategory(w http.ResponseWriter, r *http.Request) {
+	// "query" 매개변수를 읽어옵니다.
+	query := r.URL.Query().Get("query")
+
 	// MySQL 연결 문자열
-	dsn := "root:4613@tcp(127.0.0.1:3306)/tutorialDatabase"
+	dsn := "root:4613@tcp(127.0.0.1:3306)/kiosk"
 
 	// MySQL 데이터베이스에 연결
 	db, err := sql.Open("mysql", dsn)
@@ -18,18 +31,8 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
-
-	// 데이터베이스 연결 테스트
-	err = db.Ping()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("MySQL 데이터베이스에 연결되었습니다.")
-
-	// 여기에 데이터베이스 쿼리나 작업을 수행하는 코드를 추가할 수 있습니다.
 	// SELECT 문 실행
-	rows, err := db.Query("SELECT id, name, category FROM menu")
+	rows, err := db.Query("SELECT id, food_name, category FROM menu WHERE category=?", query)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,18 +41,24 @@ func main() {
 	// 결과 처리
 	for rows.Next() {
 		var id int
-		var name, category string
+		var foodName, category string
 
-		err := rows.Scan(&id, &name, &category)
+		err := rows.Scan(&id, &foodName, &category)
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		fmt.Printf("ID: %d, Name: %s, Category: %s\n", id, name, category)
+		fmt.Printf("이름 : %s / 카테고리 : %s\n", foodName, category)
 	}
+	// 클라이언트에 응답을 보냅니다.
+	fmt.Fprintf(w, "클라이언트가 '%s' 요청을 보냈습니다.", query)
+}
 
-	// 에러 처리
-	if err := rows.Err(); err != nil {
-		log.Fatal(err)
-	}
+func main() {
+	router := mux.NewRouter()
+
+	router.HandleFunc("/", testmethod)
+	router.HandleFunc("/query", GetQueryMenuCategory)
+
+	log.Println("Listening on :8080")
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
