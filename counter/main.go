@@ -19,7 +19,8 @@ func main() {
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }
 
-func GetRoot(w http.ResponseWriter, r *http.Request) {
+func GetRoot(w http.ResponseWriter, _ *http.Request) {
+	//testgithub
 
 	json := simplejson.New()
 	json.Set("foo", "bar")
