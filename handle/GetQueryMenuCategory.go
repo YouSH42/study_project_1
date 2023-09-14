@@ -38,6 +38,4 @@ func GetQueryMenuCategory(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprintf(w, "이름 : %s / 가격 : %d / 카테고리 : %s\n", foodName, price, category)
 	}
-	// // 클라이언트에 응답을 보냅니다.
-	// fmt.Fprintf(w, "클라이언트가 '%s' 요청을 보냈습니다.", query)
 }

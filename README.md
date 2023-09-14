@@ -4,7 +4,7 @@ First Study Project
 처음에 git pull을 하는 것을 까먹지 말고
 절대로 git push를 까먹지 마시오
 
-### 9/14 studyMeeting
+## 9/14 studyMeeting
  - 컴파일러 언어와 인터프리터 언어의 장단점에 대해서 조사
  - https://babpul42.tistory.com/5
  - Go언어와 mysql을 사용하여서 백엔드 부분을 구현

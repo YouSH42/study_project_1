@@ -14,6 +14,7 @@ func main() {
 
 	router.HandleFunc("/", handle.Home)
 	router.HandleFunc("/query", handle.GetQueryMenuCategory).Methods("GET")
+	router.HandleFunc("/inputinfo", handle.InputInfo).Methods("POST")
 
 	log.Println("Listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", router))
