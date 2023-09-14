@@ -21,7 +21,7 @@ func GetQueryMenuCategory(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 	// SELECT 문 실행
-	rows, err := db.Query("SELECT id, food_name, category FROM menu WHERE category=?", query)
+	rows, err := db.Query("SELECT id, food_name, price, category FROM menu WHERE category=?", query)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,14 +29,14 @@ func GetQueryMenuCategory(w http.ResponseWriter, r *http.Request) {
 
 	// 결과 처리
 	for rows.Next() {
-		var id int
+		var id, price int
 		var foodName, category string
 
-		err := rows.Scan(&id, &foodName, &category)
+		err := rows.Scan(&id, &foodName, &price, &category)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Fprintf(w, "이름 : %s / 카테고리 : %s\n", foodName, category)
+		fmt.Fprintf(w, "이름 : %s / 가격 : %d / 카테고리 : %s\n", foodName, price, category)
 	}
 	// // 클라이언트에 응답을 보냅니다.
 	// fmt.Fprintf(w, "클라이언트가 '%s' 요청을 보냈습니다.", query)
