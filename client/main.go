@@ -13,7 +13,7 @@ func main() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/", handler.Home).Methods("GET")
-	router.HandleFunc("/registration", handler.RegistrationHandler).Methods("POST")
+	router.HandleFunc("/adddata", handler.AddDataHandler).Methods("POST")
 	router.HandleFunc("/foodricelist", handler.FoodListRiceHandler).Methods("GET")
 	router.HandleFunc("/foodnoodlelist", handler.FoodListNoodleHandler).Methods("GET")
 

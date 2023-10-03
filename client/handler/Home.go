@@ -15,7 +15,8 @@ const (
 
 // 데이터를 저장할 구조체 정의
 type FoodItem struct {
-	FoodName string `json:"foodName"`
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
 	Price    int    `json:"price"`
 	Category string `json:"category"`
 }

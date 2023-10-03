@@ -13,7 +13,7 @@ func OrderHandler(w http.ResponseWriter, r *http.Request) {
 	Error(err)
 	defer conn.Close()
 	// JSON 데이터 생성
-	fooditem := FoodItem{FoodName: "Guksoo", Price: 2500, Category: "C2"}
+	fooditem := FoodItem{Name: "Guksoo", Price: 2500, Category: "C2"}
 	jsonData, err := json.Marshal(fooditem)
 	Error(err)
 	// JSON 데이터를 서버로 전송

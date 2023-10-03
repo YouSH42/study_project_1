@@ -22,7 +22,7 @@ func FoodListHandler(w http.ResponseWriter, r *http.Request) {
 	var Fooddata []FoodItem
 	for rows.Next() {
 		var item FoodItem
-		if err := rows.Scan(&item.FoodName, &item.Price, &item.Category); err != nil {
+		if err := rows.Scan(&item.Name, &item.Price, &item.Category); err != nil {
 			log.Fatal(err)
 		}
 		Fooddata = append(Fooddata, item)
