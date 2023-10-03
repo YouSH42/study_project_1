@@ -1,4 +1,4 @@
-package handle
+package handler
 
 import (
 	"html/template"
@@ -7,7 +7,7 @@ import (
 
 func Home(w http.ResponseWriter, _ *http.Request) {
 
-	tmpl := template.Must(template.ParseFiles("templates/index.html"))
+	// HTML 템플릿 렌더링
+	tmpl := template.Must(template.ParseFiles("templates/counter.html"))
 	tmpl.Execute(w, nil)
-
 }

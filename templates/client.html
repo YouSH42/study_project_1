@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>음식 주문 키오스크</title>
+</head>
+<body>
+    <!--음식 리스트 불러오는 부분-->
+    <h1>음식 목록</h1>
+    <div>
+        <button id="food_list_rice_button">밥류</button>
+        <ul id="food_list_rice" style="display: none;"></ul>
+    </div>
+    <div>
+        <button id="food_list_noodle_button">면류</button>
+        <ul id="food_list_noodle" style="display: none;"></ul>
+    </div>
+    <!--음식 등록하는 부분-->
+    <form id="food_form">
+        <label for="name">음식 이름:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="price">가격:</label>
+        <input type="number" id="price" name="price" required><br>
+
+        <label for="category">카테고리:</label>
+        <input type="text" id="category" name="category" required><br>
+
+        <button type="submit">등록</button>
+    </form>
+
+    <script>
+        //음식 등록 스크립트
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("food_form");
+            const responseDiv = document.getElementById("response");
+
+            form.addEventListener("submit", function(event){
+                event.preventDefault();
+
+                //사용자로부터 입력받은 데이터를 가져와 JSON 형식으로 생성
+                const name = document.getElementById("name").value;
+                const price = document.getAnimations("price").value;
+                const category = document.getAnimations("category").value;
+                const jsonData = JSON.stringify({name, price, category});
+
+                //서버로 JSON 데이터 전송
+                fetch("/registration", {
+                    method : "POST",
+                    body : jsonData,
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // 서버에서 받은 응답을 출력
+                        responseDiv.textContent = `서버에서 받은 응답: ${JSON.stringify(data)}`;
+                    })
+                    .catch((error) => {
+                        console.error("에러:", error);
+                    });
+            });
+        });
+
+        // 밥류 관련 스크립트
+        var foodListRiceButton = document.getElementById("food_list_rice_button");
+        var foodListRice = document.getElementById("food_list_rice");
+
+        foodListRiceButton.addEventListener("click", function() {
+            if (foodListRice.style.display === "none" || foodListRice.style.display === "") {
+                fetch("/foodricelist") // 서버의 데이터 엔드포인트로 요청 보내기
+                    .then(response => response.json())
+                    .then(data => {
+                        // JSON 데이터를 사용하여 목록 생성
+                        data.forEach(item => {
+                            var listItem = document.createElement("li");
+                            listItem.textContent = `${item.foodName} - ${item.price}원 (카테고리: ${item.category})`;
+                            foodListRice.appendChild(listItem);
+                        });
+                    });
+                foodListRice.style.display = "block";
+            } else {
+                foodListRice.style.display = "none";
+                // 목록 비우기
+                while (foodListRice.firstChild) {
+                    foodListRice.removeChild(foodListRice.firstChild);
+                }
+            }
+        });
+        // 면류 관련 스크립트
+        var foodListNoodleButton = document.getElementById("food_list_noodle_button");
+        var foodListNoodle = document.getElementById("food_list_noodle");
+
+        foodListNoodleButton.addEventListener("click", function() {
+            if (foodListNoodle.style.display === "none" || foodListNoodle.style.display === "") {
+                fetch("/foodnoodlelist") // 서버의 데이터 엔드포인트로 요청 보내기
+                    .then(response => response.json())
+                    .then(data => {
+                        // JSON 데이터를 사용하여 목록 생성
+                        data.forEach(item => {
+                            var listItem = document.createElement("li");
+                            listItem.textContent = `${item.foodName} - ${item.price}원 (카테고리: ${item.category})`;
+                            foodListNoodle.appendChild(listItem);
+                        });
+                    });
+                foodListNoodle.style.display = "block";
+            } else {
+                foodListNoodle.style.display = "none";
+                // 목록 비우기
+                while (foodListNoodle.firstChild) {
+                    foodListNoodle.removeChild(foodListNoodle.firstChild);
+                }
+            }
+        });
+        //음료 관련 스크립트
+    </script>
+</body>
+</html>
