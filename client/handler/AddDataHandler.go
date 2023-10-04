@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -21,15 +22,12 @@ func AddDataHandler(w http.ResponseWriter, r *http.Request) {
 	db, err := sql.Open(dbDriver, dbUser+":"+dbPassword+"@/"+dbName)
 	Error(err)
 	defer db.Close()
-
-	responseMessage := struct {
-		Message string `json:"message"`
-	}{
-		Message: "추가되었습니다",
+	//데이터 삽입 코드
+	insertQuery := "INSERT INTO menu (food_name,price,category) VALUES (?, ?, ?)"
+	_, err = db.Exec(insertQuery, receivedFoodInfo.Name, receivedFoodInfo.Price, receivedFoodInfo.Category)
+	if err != nil {
+		log.Fatal(err)
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	responseJSON, _ := json.Marshal(responseMessage)
-	w.Write(responseJSON)
+	fmt.Println("데이터 삽입 완료")
 
 }

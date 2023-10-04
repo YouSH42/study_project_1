@@ -16,6 +16,7 @@ func main() {
 	router.HandleFunc("/adddata", handler.AddDataHandler).Methods("POST")
 	router.HandleFunc("/foodricelist", handler.FoodListRiceHandler).Methods("GET")
 	router.HandleFunc("/foodnoodlelist", handler.FoodListNoodleHandler).Methods("GET")
+	router.HandleFunc("/message", handler.MessageHandler)
 
 	log.Println("Listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", router))

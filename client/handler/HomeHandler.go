@@ -9,7 +9,7 @@ import (
 const (
 	dbDriver   = "mysql"
 	dbUser     = "root"
-	dbPassword = "4613"
+	dbPassword = "enddl4613"
 	dbName     = "kiosk"
 )
 

@@ -5,6 +5,10 @@
     <title>음식 주문 키오스크</title>
 </head>
 <body>
+    <!-- 버튼을 클릭하면 다른 웹 페이지로 이동 -->
+    <a href="http://localhost:8080/message" target="_blank">
+        <button>메세지 기능</button>
+    </a>
     <!--음식 리스트 불러오는 부분-->
     <h1>음식 목록</h1>
     <div>
@@ -112,9 +116,7 @@
                             // 서버에서 받은 응답을 출력
                             responseDiv.textContent = `${JSON.stringify(data)}`;
                         })
-                        .catch((error) => {
-                            console.error("에러:", error);
-                        });
+                    location.reload();
                 });
             });
     </script>
