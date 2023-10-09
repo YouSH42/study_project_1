@@ -9,11 +9,11 @@ import (
 const (
 	dbDriver   = "mysql"
 	dbUser     = "root"
-	dbPassword = "4613"
+	dbPassword = "enddl4613"
 	dbName     = "kiosk"
 )
 
-// 데이터를 저장할 구조체 정의
+// 데이터를 저장할 구조체 정의“
 type FoodItem struct {
 	ID       int    `json:"id"`
 	Name     string `json:"name"`

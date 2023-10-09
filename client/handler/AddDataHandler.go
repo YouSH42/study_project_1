@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func AddDataHandler(w http.ResponseWriter, r *http.Request) {
+func AddDataHandler(_ http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	Error(err)

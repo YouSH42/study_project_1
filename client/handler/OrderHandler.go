@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func OrderHandler(w http.ResponseWriter, r *http.Request) {
+func OrderHandler(_ http.ResponseWriter, _ *http.Request) {
 
 	// TCP 서버에 연결
 	conn, err := net.Dial("tcp", "localhost:9000")

@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func FoodListRiceHandler(w http.ResponseWriter, r *http.Request) {
+func FoodListRiceHandler(w http.ResponseWriter, _ *http.Request) {
 	// 데이터베이스 연결
 	db, err := sql.Open(dbDriver, dbUser+":"+dbPassword+"@/"+dbName)
 	Error(err)
