@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	handler "github.com/YouSH42/study_project_1/client/handler"
+	"github.com/YouSH42/study_project_1/client/handler"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 )

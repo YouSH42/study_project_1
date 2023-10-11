@@ -1,13 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>음식 주문 카운터</title>
 </head>
+
 <body>
     <h1>Hello World</h1>
+    <section>
+        <h1>주문 목록</h1>
+        <div>
+            <button id="food_order_button">주문서</button>
+            <ul id="food_order_checkbox" style="display: none;"></ul>
+        </div>
+    </section>
     <script>
-        
+        var foodOrderListButton = document.getElementById("food_order_button");
+        var foodOrderList = document.getElementById("food_order_checkbox");
+
+        foodOrderListButton.addEventListener("click", function () {
+            if (foodOrderList.style.display === "none" || foodOrderList.style.display === "") {
+                fetch("/orderlist") // 서버의 데이터 엔드포인트로 요청 보내기
+                    .then(response => response.json())
+                    .then(data => {
+                        // JSON 데이터를 사용하여 목록 생성
+                        data.forEach(item => {
+                            var listItem = document.createElement("li");
+                            listItem.textContent = `${item.name} - ${item.price}원 ${item.time}`;
+                            foodOrderList.appendChild(listItem);
+                        });
+                    });
+                    foodOrderList.style.display = "block";
+            } else {
+                foodOrderList.style.display = "none";
+                // 목록 비우기
+                while (foodOrderList.firstChild) {
+                    foodOrderList.removeChild(foodOrderList.firstChild);
+                }
+            }
+        });
     </script>
 </body>
+
 </html>
