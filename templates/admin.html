@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        fieldset {
+            max-width: 300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        legend {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 5px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        input[type="submit"],
+        input[type="reset"] {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        input[type="reset"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <fieldset>
+        <legend>
+            <h3>음식 등록</h3>
+        </legend>
+        <form action="/adddata" method="get">
+            <p>음식 이름: <input type="text" name="name" placeholder="음식 이름" required></p>
+            <p>가격: <input type="number" name="price" placeholder="가격" required></p>
+            <p>카테고리: <input type="text" name="category" placeholder="카테고리" required></p>
+            <input type="submit" value="등록">
+            <input type="reset" value="초기화">
+        </form>
+    </fieldset>
+</body>
+</html>

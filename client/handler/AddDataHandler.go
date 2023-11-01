@@ -2,32 +2,31 @@ package handler
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 )
 
-func AddDataHandler(_ http.ResponseWriter, r *http.Request) {
+func AddDataHandler(w http.ResponseWriter, r *http.Request) {
+	//URL 쿼리 매개변수 가져오기
+	queryParams := r.URL.Query()
 
-	body, err := io.ReadAll(r.Body)
-	Error(err)
+	name := queryParams.Get("name")
+	price := queryParams.Get("price")
+	category := queryParams.Get("category")
 
-	var receivedFoodInfo FoodItem
-	err = json.Unmarshal(body, &receivedFoodInfo)
-	Error(err)
-	fmt.Println("음식 이름 :", receivedFoodInfo.Name, "가격 :", receivedFoodInfo.Price, "카테고리 :", receivedFoodInfo.Category)
+	// fmt.Println("음식 이름 :", name, "가격 :", price, "카테고리 :", category)
 	// 데이터베이스 연결
 	db, err := sql.Open(dbDriver, dbUser+":"+dbPassword+"@/"+dbName)
 	Error(err)
 	defer db.Close()
 	//데이터 삽입 코드
 	insertQuery := "INSERT INTO menu (food_name,price,category) VALUES (?, ?, ?)"
-	_, err = db.Exec(insertQuery, receivedFoodInfo.Name, receivedFoodInfo.Price, receivedFoodInfo.Category)
+	_, err = db.Exec(insertQuery, name, price, category)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("데이터 삽입 완료")
 
+	http.Redirect(w, r, "/admin", http.StatusSeeOther)
 }

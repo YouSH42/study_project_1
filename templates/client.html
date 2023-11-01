@@ -4,17 +4,102 @@
 <head>
     <meta charset="UTF-8">
     <title>음식 주문 키오스크</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        fieldset {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        legend {
+            font-weight: bold;
+            width: 50%;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: inline-block;
+            width: 60%;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 25%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="reset"] {
+            background-color: #ccc;
+            color: #000;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    </style>
 </head>
 
 <body>
     <!-- 버튼을 클릭하면 다른 웹 페이지로 이동 -->
-    <section>
-        <a href="http://localhost:8080/message" target="_blank">
-            <button>메세지 기능(미구현)</button>
-        </a></section>
+    <a href="http://localhost:8080/message" target="_blank">
+        <button>메세지 기능(미구현)</button>
+    </a>
+    <a href="http://localhost:8080/admin" target="_blank">
+        <button>관리자 페이지</button>
+    </a>
     <!--음식 리스트 불러오는 부분-->
-    <section>
-        <h1>음식 목록</h1>
+    <fieldset>
+        <legend>
+            <h3>음식 목록</h3>
+        </legend>
         <div>
             <button id="food_list_rice_button">밥류</button>
             <ul id="food_list_rice_checkbox" style="display: none;"></ul>
@@ -23,145 +108,111 @@
             <button id="food_list_noodle_button">면류</button>
             <ul id="food_list_noodle_checkbox" style="display: none;"></ul>
         </div>
-        <input type="submit">
-    </section>
-    <!--음식 등록하는 부분-->
-    <section>
-        <fieldset>
-            <legend>Add new menu</legend>
-            <form id="food_form">
-                <label for="name">음식 이름:</label>
-                <input type="text" name="name" placeholder="음식 이름" required><br>
-        
-                <label for="price">가격:</label>
-                <input type="number" name="price" placeholder="가격" required><br>
-        
-                <label for="category">카테고리:</label>
-                <input type="text" name="category" placeholder="카테고리" required><br>
-        
-                <input type="submit" value="등록">
-                <input type="reset" value="초기화">
-            </form>
-        </fieldset>
-    </section>
-    <!--음식 주문하는 부분-->
+    </fieldset>
+    <!-- 음식 주문 하는 부분 -->
+    <fieldset>
+        <legend>
+            <h3>음식 주문</h3>
+        </legend>
+        <form id="order-form" action="/order" method="get">
+            <label>음식 이름: <input type="text" name="name" placeholder="음식 이름" required></label>
+            <label>가격: <input type="number" name="price" placeholder="가격" required></label>
+            <label>카테고리: <input type="text" name="category" placeholder="카테고리" required></label><br>
+            <input type="submit" value="주문">
+        </form>
+    </fieldset>
     <script>
-        //주문 내용 전송하는 스크립트
-        
+        // 음식 주문 스크립트
+        var orderForm = document.getElementById("order-form");
+        // 밥류 관련 스크립트
+        var foodListRiceButton = document.getElementById("food_list_rice_button");
+        var foodListRiceCheckbox = document.getElementById("food_list_rice_checkbox");
 
-            // 밥류 관련 스크립트
-            var foodListRiceButton = document.getElementById("food_list_rice_button");
-            var foodListRiceCheckbox = document.getElementById("food_list_rice_checkbox");
+        foodListRiceButton.addEventListener("click", function () {
+            if (foodListRiceCheckbox.style.display === "none" || foodListRiceCheckbox.style.display === "") {
+                // JSON 데이터를 사용하여 목록 생성
+                fetch("/foodricelist")
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(item => {
+                            // 리스트 아이템 생성
+                            var listItem = document.createElement("li");
 
-            foodListRiceButton.addEventListener("click", function () {
-                if (foodListRiceCheckbox.style.display === "none" || foodListRiceCheckbox.style.display === "") {
-                    // JSON 데이터를 사용하여 목록 생성
-                    fetch("/foodricelist")
-                        .then(response => response.json())
-                        .then(data => {
-                            data.forEach(item => {
-                                // 리스트 아이템 생성
-                                var listItem = document.createElement("li");
+                            // 버튼 생성 (주문 버튼)
+                            var orderButton = document.createElement("button");
+                            orderButton.textContent = "선택";
 
-                                // 체크박스 생성
-                                var checkbox = document.createElement("input");
-                                checkbox.type = "checkbox";
-                                checkbox.name = "food_item";
-                                checkbox.value = item.id; // 아이템의 고유 ID 또는 식별자를 여기에 설정
+                            // 라벨 생성 (항목 이름과 가격을 표시)
+                            var label = document.createElement("label");
+                            label.textContent = `${item.name} - ${item.price}원`;
 
-                                // 라벨 생성 (항목 이름과 가격을 표시)
-                                var label = document.createElement("label");
-                                label.textContent = `${item.name} - ${item.price}원 (카테고리: ${item.category})`;
+                            // 아이템을 목록에 추가
+                            listItem.appendChild(orderButton);
+                            listItem.appendChild(label);
+                            foodListRiceCheckbox.appendChild(listItem);
 
-                                // 아이템을 목록에 추가
-                                listItem.appendChild(checkbox);
-                                listItem.appendChild(label);
-                                foodListRiceCheckbox.appendChild(listItem);
+                            // 클릭 이벤트 핸들러를 추가하여 해당 음식 정보를 주문 양식에 채웁니다.
+                            orderButton.addEventListener("click", function () {
+                                orderForm.elements["name"].value = item.name;
+                                orderForm.elements["price"].value = item.price;
+                                orderForm.elements["category"].value = item.category;
                             });
                         });
-                    foodListRiceCheckbox.style.display = "block";
-                } else {
-                    foodListRiceCheckbox.style.display = "none";
-                    //목록 비우기
-                    while (foodListRiceCheckbox.firstChild) {
-                        foodListRiceCheckbox.removeChild(foodListRiceCheckbox.firstChild);
-                    }
+                    });
+                foodListRiceCheckbox.style.display = "block";
+            } else {
+                foodListRiceCheckbox.style.display = "none";
+                //목록 비우기
+                while (foodListRiceCheckbox.firstChild) {
+                    foodListRiceCheckbox.removeChild(foodListRiceCheckbox.firstChild);
                 }
-            });
+            }
+        });
 
         // 면류 관련 스크립트
         var foodListNoodleButton = document.getElementById("food_list_noodle_button");
-            var foodListNoodleCheckbox = document.getElementById("food_list_noodle_checkbox");
+        var foodListNoodleCheckbox = document.getElementById("food_list_noodle_checkbox");
 
-            foodListNoodleButton.addEventListener("click", function () {
-                if (foodListNoodleCheckbox.style.display === "none" || foodListNoodleCheckbox.style.display === "") {
-                    // "면류" 데이터를 가져옴
-                    fetch("/foodnoodlelist")
-                        .then(response => response.json())
-                        .then(data => {
-                            // JSON 데이터를 사용하여 목록 생성
-                            data.forEach(item => {
-                                // 리스트 아이템 생성
-                                var listItem = document.createElement("li");
+        foodListNoodleButton.addEventListener("click", function () {
+            if (foodListNoodleCheckbox.style.display === "none" || foodListNoodleCheckbox.style.display === "") {
+                // "면류" 데이터를 가져옴
+                fetch("/foodnoodlelist")
+                    .then(response => response.json())
+                    .then(data => {
+                        // JSON 데이터를 사용하여 목록 생성
+                        data.forEach(item => {
+                            // 리스트 아이템 생성
+                            var listItem = document.createElement("li");
 
-                                // 체크박스 생성
-                                var checkbox = document.createElement("input");
-                                checkbox.type = "checkbox";
-                                checkbox.name = "food_item";
-                                checkbox.value = item.id; // 아이템의 고유 ID 또는 식별자를 여기에 설정
+                            // 버튼 생성 (주문 버튼)
+                            var orderButton = document.createElement("button");
+                            orderButton.textContent = "선택";
 
-                                // 라벨 생성 (항목 이름과 가격을 표시)
-                                var label = document.createElement("label");
-                                label.textContent = `${item.name} - ${item.price}원 (카테고리: ${item.category})`;
+                            // 라벨 생성 (항목 이름과 가격을 표시)
+                            var label = document.createElement("label");
+                            label.textContent = `${item.name} - ${item.price}원`;
 
-                                // 아이템을 목록에 추가
-                                listItem.appendChild(checkbox);
-                                listItem.appendChild(label);
-                                foodListNoodleCheckbox.appendChild(listItem);
+                            // 아이템을 목록에 추가
+                            listItem.appendChild(orderButton);
+                            listItem.appendChild(label);
+                            foodListNoodleCheckbox.appendChild(listItem);
+
+                            // 클릭 이벤트 핸들러를 추가하여 해당 음식 정보를 주문 양식에 채웁니다.
+                            orderButton.addEventListener("click", function () {
+                                orderForm.elements["name"].value = item.name;
+                                orderForm.elements["price"].value = item.price;
+                                orderForm.elements["category"].value = item.category;
                             });
                         });
-                    foodListNoodleCheckbox.style.display = "block";
-                } else {
-                    foodListNoodleCheckbox.style.display = "none";
-                    //목록 비우기
-                    while (foodListNoodleCheckbox.firstChild) {
-                        foodListNoodleCheckbox.removeChild(foodListNoodleCheckbox.firstChild);
-                    }
+                    });
+                foodListNoodleCheckbox.style.display = "block";
+            } else {
+                foodListNoodleCheckbox.style.display = "none";
+                //목록 비우기
+                while (foodListNoodleCheckbox.firstChild) {
+                    foodListNoodleCheckbox.removeChild(foodListNoodleCheckbox.firstChild);
                 }
-            });
-
-        //음식 등록 스크립트
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("food_form");
-            const responseDiv = document.getElementById("response");
-
-            form.addEventListener("submit", function (event) {
-                event.preventDefault();
-
-                //사용자로부터 입력받은 데이터를 가져와 JSON 형식으로 생성
-                const name = document.getElementById("name").value;
-                const price = parseInt(document.getElementById("price").value);
-                const category = document.getElementById("category").value;
-                const jsonData = JSON.stringify({ name, price, category });
-                console.log(name);
-                console.log(price);
-                console.log(category);
-
-                //서버로 JSON 데이터 전송
-                fetch("/adddata", {
-                    method: "POST",
-                    body: jsonData,
-                    headers: {
-                        "Content-Type": "application/json",
-                    }
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        // 서버에서 받은 응답을 출력
-                        responseDiv.textContent = `${JSON.stringify(data)}`;
-                    })
-                location.reload();
-            });
+            }
         });
     </script>
 </body>
