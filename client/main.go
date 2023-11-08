@@ -25,6 +25,6 @@ func main() {
 	// /script 경로에서 정적 파일 제공
 	http.Handle("/script/", http.StripPrefix("/script/", fs))
 
-	log.Println("Listening on :8888")
-	log.Fatal(http.ListenAndServe(":8888", router))
+	log.Println("Listening on :8080")
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
