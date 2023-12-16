@@ -21,6 +21,7 @@ func main() {
 	router.HandleFunc("/admin", handler.AdminHandler)
 	// 정적 파일 서빙을 위한 디렉터리 설정
 	fs := http.FileServer(http.Dir("static"))
+	println("Hello Go!")
 
 	// /script 경로에서 정적 파일 제공
 	http.Handle("/script/", http.StripPrefix("/script/", fs))
